@@ -1,0 +1,93 @@
+{
+  "home": "Home",
+  "proposals": "Proposals",
+  "templates": "Templates",
+  "dashboard": "Go to Dashboard",
+  "getStarted": "Get Started",
+  "generateProposal": "Generate Technical Proposal",
+
+  "progress": "Progress",
+  "step_upload": "Upload Document",
+  "step_review": "Review Details",
+  "step_generate": "Generate Proposal",
+  
+  "aiPowered": "AI Powered Proposal Generation",
+  "createWinning": "Create Winning",
+
+  "heroDesc": "Transform your RFP documents into engaging technical and financial proposals with the power of AI.",
+
+  "uploadRfp": "Upload RFP Document",
+  "dragDrop": "Drag and drop your PDF here, or click to browse",
+  "supportedFormats": "Supports PDF, Word, PPT & Images up to 100MB",
+
+  "processing": "Processing...",
+  "fileReady": "File Ready For Processing",
+
+  "generateTechnical": "Generate Technical Proposal",
+  "generateTechnicalDesc": "Create a comprehensive PPT with project details, methodology, execution plans, and booth designs.",
+
+
+  "generateFinancial": "Generate Financial Proposal",
+  "generateFinancialDesc": "Build detailed cost breakdowns with logistics, furniture, and operational expenses.",
+
+  "recentProposals": "Recent Proposals",
+  "viewAll": "View all Projects",
+
+  "aiReading": "AI is reading your document",
+  "aiReadingDesc": "Please wait while we analyze your RFP and extract requirements…",
+  "footerText": "Expand. AI-powered proposal generation.",
+   "selectTemplate": "Select a template",
+  "technical": "Technical",
+  "financial": "Financial",
+  "default": "Default",
+  "updatedOn": "Updated on",
+  "useTemplate": "Use this template",
+  "technicalProposal": "Technical Proposal",
+  "rfpAnalysis": "RFP Analysis",
+  "requirementsExtracted": "Requirements extracted",
+  "noRfpContent": "No RFP content found for this section.",
+  "aiWritingAssistant": "AI Writing Assistant",
+
+  "clientName": "Client’s Name",
+  "clientNamePlaceholder": "e.g. NCEC",
+  "clientLogo": "Client’s Logo",
+  "projectOverview": "Project Overview",
+  "projectOverviewPlaceholder": "Provide a comprehensive overview...",
+
+  "companyIntro": "Company Introduction",
+  "methodology": "Methodology Narrative",
+  "methodologyPlaceholder": "Describe your methodology...",
+
+  "activitySteps": "Activity Steps",
+  "activityStepsPlaceholder": "List the key activities & tasks...",
+
+  "scheduling": "Scheduling Table",
+  "schedulingPlaceholder": "Detail timeline, milestones & deadlines...",
+
+  "boothDescription": "Enter Booth Description",
+  "generateBooth": "Generate Booth Design",
+  "generating": "Generating...",
+
+  "selectServices": "Select Services",
+  "otherAddons": "Other Add-ons",
+  "otherAddonsPlaceholder": "List any additional services...",
+
+  "previous": "Previous",
+  "next": "Next",
+  "generatingPpt": "Generating PPT...",
+
+  "addItem": "Add Item",
+  "price": "Price",
+  "totalFurnitureCost": "Total Furniture Cost",
+  "stepProjectIntro": "Project Introduction",
+  "stepCompanyBrief": "Company Brief",
+  "stepMethodology": "Methodology",
+  "stepActionPlan": "Action Plan",
+  "stepExecutionSchedule": "Execution Schedule",
+  "stepFurniture": "Furniture Sample",
+  "stepBooth": "Booth Design",
+  "stepLogistics": "Logistics & Services",
+  "projectIntroduction": "Project Introduction"
+
+
+}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { MoreVertical, Check } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 export default function SelectTemplate() {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const { t } = useTranslation();
     const fileName = location?.state?.fileName || "Document.pptx";
 
     const [selected, setSelected] = useState(null);
@@ -57,7 +57,7 @@ export default function SelectTemplate() {
             state: {
                 fileName,
                 payload: location?.state?.payload, // pass REAL API response forward
-                selectedTemplate:selected
+                selectedTemplate: selected
             },
         });
     };
@@ -75,28 +75,28 @@ export default function SelectTemplate() {
                 </button>
 
                 <h1 className="text-2xl font-semibold text-[#0F172A]">
-                    Select a template
+                    {t("selectTemplate")}
                 </h1>
             </div>
 
             {/* TEMPLATE GRID */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
 
-                {templates.map((t) => {
-                    const active = selected === t.id;
+                {templates.map((template) => {
+                    const active = selected === template.id;
 
                     return (
                         <div
-                            key={t.id}
-                            onClick={() => setSelected(t.id)}
+                            key={template.id}
+                            onClick={() => setSelected(template.id)}
                             className={`rounded-3xl cursor-pointer overflow-hidden border transition shadow-sm relative
                                 ${active ? "border-blue-600 shadow-lg" : "border-gray-200"}
                             `}
                         >
                             {/* IMAGE */}
                             <img
-                                src={t.image}
-                                alt={t.name}
+                                src={template.image}
+                                alt={template.name}
                                 className="w-full h-48 object-cover"
                             />
 
@@ -105,31 +105,31 @@ export default function SelectTemplate() {
 
                                 <span
                                     className={`px-3 py-1 text-xs rounded-full
-                                        ${t.type === "Technical"
+                                        ${template.type === "Technical"
                                             ? "bg-purple-100 text-purple-600"
                                             : t.type === "Financial"
                                                 ? "bg-green-100 text-green-600"
                                                 : "bg-gray-100 text-gray-600"}
                                     `}
                                 >
-                                    {t.type}
+                                    {t(template.type === "Technical" ? "technical" : "financial")}
                                 </span>
 
                                 {t.default && (
                                     <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 flex items-center gap-1">
-                                        ⭐ Default
+                                        ⭐ {t("default")}
                                     </span>
                                 )}
                             </div>
 
                             {/* NAME */}
                             <h3 className="px-4 pt-2 text-lg font-semibold text-[#0F172A]">
-                                {t.name}
+                                {template.name}
                             </h3>
 
                             {/* UPDATED */}
                             <p className="px-4 pb-4 text-xs text-gray-500">
-                                Updated on {t.updated}
+                               {t("updatedOn")} {template.updated}
                             </p>
 
                             {/* 3 DOT MENU */}
@@ -160,7 +160,7 @@ export default function SelectTemplate() {
                             : "bg-gray-300 cursor-not-allowed"}
                     `}
                 >
-                    Use this template →
+                    {t("useTemplate")} →
                 </button>
             </div>
         </div>

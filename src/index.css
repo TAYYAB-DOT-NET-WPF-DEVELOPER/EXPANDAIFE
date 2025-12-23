@@ -11,3 +11,6 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.font-arabic {
+  font-family: "Noto Naskh Arabic", "Cairo", serif;
+}

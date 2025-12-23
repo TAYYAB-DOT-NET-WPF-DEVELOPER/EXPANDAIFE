@@ -1,0 +1,94 @@
+{
+  "home": "الرئيسية",
+  "proposals": "المقترحات",
+  "templates": "القوالب",
+  "dashboard": "الذهاب إلى لوحة التحكم",
+  "getStarted": "ابدأ الآن",
+  "generateProposal": "إنشاء مقترح تقني",
+  
+  "progress": "التقدم",
+  "step_upload": "رفع المستند",
+  "step_review": "مراجعة التفاصيل",
+  "step_generate": "إنشاء المقترح",
+  
+  "aiPowered": "إنشاء مقترحات مدعوم بالذكاء الاصطناعي",
+  "createWinning": "أنشئ مقترحات",
+  
+  "heroDesc": "حوّل مستندات طلبات العروض الخاصة بك إلى مقترحات تقنية ومالية احترافية باستخدام قوة الذكاء الاصطناعي.",
+
+  "uploadRfp": "رفع مستند RFP",
+  "dragDrop": "اسحب وأفلت ملف PDF هنا أو انقر للتصفح",
+  "supportedFormats": "يدعم PDF و Word و PPT والصور حتى 100 ميجابايت",
+
+  "processing": "جاري المعالجة...",
+  "fileReady": "الملف جاهز للمعالجة",
+
+  "generateTechnical": "إنشاء مقترح تقني",
+  "generateTechnicalDesc": "إنشاء عرض تقديمي شامل يحتوي على تفاصيل المشروع والمنهجية وخطط التنفيذ وتصاميم الأجنحة.",
+
+
+  "generateFinancial": "إنشاء مقترح مالي",
+  "generateFinancialDesc": "إعداد تفصيل التكاليف بما في ذلك الخدمات اللوجستية والأثاث والمصاريف التشغيلية.",
+
+  "recentProposals": "المقترحات الأخيرة",
+  "viewAll": "عرض جميع المشاريع",
+
+  "aiReading": "يقوم الذكاء الاصطناعي بقراءة المستند",
+  "aiReadingDesc": "يرجى الانتظار بينما نقوم بتحليل ملف RFP واستخراج المتطلبات…",
+  "footerText": "إكسباند. إنشاء مقترحات مدعوم بالذكاء الاصطناعي.",
+  "selectTemplate": "اختر قالبًا",
+  "technical": "تقني",
+  "financial": "مالي",
+  "default": "افتراضي",
+  "updatedOn": "تم التحديث في",
+  "useTemplate": "استخدم هذا القالب",
+  "technicalProposal": "المقترح التقني",
+  "rfpAnalysis": "تحليل طلب العروض",
+  "requirementsExtracted": "تم استخراج المتطلبات",
+  "noRfpContent": "لا يوجد محتوى متاح لهذا القسم.",
+  "aiWritingAssistant": "مساعد الكتابة بالذكاء الاصطناعي",
+
+  "clientName": "اسم العميل",
+  "clientNamePlaceholder": "مثال: NCEC",
+  "clientLogo": "شعار العميل",
+  "projectOverview": "نظرة عامة على المشروع",
+  "projectOverviewPlaceholder": "قدم وصفًا شاملاً للمشروع...",
+
+  "companyIntro": "نبذة عن الشركة",
+  "methodology": "المنهجية",
+  "methodologyPlaceholder": "اشرح منهجية التنفيذ...",
+
+  "activitySteps": "خطوات التنفيذ",
+  "activityStepsPlaceholder": "اذكر الأنشطة والمهام الرئيسية...",
+
+  "scheduling": "الجدول الزمني",
+  "schedulingPlaceholder": "حدد الجدول الزمني والمراحل...",
+
+  "boothDescription": "وصف الجناح",
+  "generateBooth": "إنشاء تصميم الجناح",
+  "generating": "جاري الإنشاء...",
+
+  "selectServices": "اختيار الخدمات",
+  "otherAddons": "إضافات أخرى",
+  "otherAddonsPlaceholder": "أضف أي خدمات إضافية...",
+
+  "previous": "السابق",
+  "next": "التالي",
+  "generatingPpt": "جاري إنشاء العرض...",
+
+  "addItem": "إضافة عنصر",
+  "price": "السعر",
+  "totalFurnitureCost": "إجمالي تكلفة الأثاث",
+  "stepProjectIntro": "مقدمة المشروع",
+  "stepCompanyBrief": "نبذة عن الشركة",
+  "stepMethodology": "المنهجية",
+  "stepActionPlan": "خطة التنفيذ",
+  "stepExecutionSchedule": "الجدول الزمني",
+  "stepFurniture": "نماذج الأثاث",
+  "stepBooth": "تصميم الجناح",
+  "stepLogistics": "الخدمات اللوجستية",
+  "projectIntroduction": "مقدمة المشروع"
+
+
+
+}

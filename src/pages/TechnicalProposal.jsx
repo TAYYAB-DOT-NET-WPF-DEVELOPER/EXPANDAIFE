@@ -2,17 +2,19 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { topicMapper } from "../utils/topicMapper";
-import { textToBullets } from "../utils/textHelper";
+import FormattedText from "../components/FormattedText";
+// import { topicMapper } from "../utils/topicMapper";
+// import { textToBullets } from "../utils/textHelper";
 import { generateFinalPptJson } from "../utils/pptJsonBuilder";
-
+import SmartTextarea from "../components/SmartTextarea";
+import { useTranslation } from "react-i18next";
 /* --------------------------------------------------------
    MAIN COMPONENT
 --------------------------------------------------------- */
 export default function TechnicalProposal() {
     const { state } = useLocation();
     const navigate = useNavigate();
-
+    const { t } = useTranslation();
     const fileName = state?.fileName || "Document.pdf";
 
     /* ---------------------------
@@ -57,9 +59,9 @@ export default function TechnicalProposal() {
     const [methodologyNarrative, setMethodologyNarrative] = useState(
         methodologyText || ""
     );
-    const [executionPlanOverview, setExecutionPlanOverview] = useState(
-        methodologyText || ""
-    );
+    // const [executionPlanOverview, setExecutionPlanOverview] = useState(
+    //     methodologyText || ""
+    // );
 
     // Step 4 – Action plan
     const [activitySteps, setActivitySteps] = useState(actionPlanText || "");
@@ -92,25 +94,21 @@ export default function TechnicalProposal() {
     };
 
     const [activeStep, setActiveStep] = useState(1);
-
-    /* ONLY SHOW RFP CONTENT FOR CURRENT STEP
-       If found === true we pick the .text field,
-       otherwise RFP Analysis says "No RFP content..."
-    */
     const activeRfpKey = stepKeyMap[activeStep];
     const activeRfpItem =
         rfpData[activeRfpKey]?.found ? rfpData[activeRfpKey] : null;
 
     const stepsList = [
-        "Project Introduction",
-        "Company Brief",
-        "Methodology",
-        "Action Plan",
-        "Execution Schedule",
-        "Furniture Sample",
-        "Booth Design",
-        "Logistics & Services",
+        "stepProjectIntro",
+        "stepCompanyBrief",
+        "stepMethodology",
+        "stepActionPlan",
+        "stepExecutionSchedule",
+        "stepFurniture",
+        "stepBooth",
+        "stepLogistics",
     ];
+
 
     const [openCard, setOpenCard] = useState(1);
     const toggleCard = (id) => setOpenCard(openCard === id ? null : id);
@@ -131,7 +129,7 @@ export default function TechnicalProposal() {
             const clientProjectName =
                 clientName || "تفعيل وادارة أنشطة هيئة الحكومة الرقمية في المؤتمرات والمعارض";
 
-            const clientLogoPath = clientLogoFile || null;
+            // const clientLogoPath = clientLogoFile || null;
 
             const boothCombinedText = `${boothApiText || ""}\n${boothUserText || ""}`.trim();
 
@@ -145,7 +143,7 @@ export default function TechnicalProposal() {
                 methodology: {
                     methodologyRfp: methodologyText,
                     methodologyNarrative,
-                    executionPlanOverview,
+                    // executionPlanOverview,
                 },
                 actionPlan: activitySteps,
                 executionSchedule: scheduleTable,
@@ -177,7 +175,7 @@ export default function TechnicalProposal() {
             formData.append("builtin_file_4", "");
             formData.append("builtin_file_5", "");
 
-            const response = await fetch("/api/generate", {
+            const response = await fetch("http://18.234.84.154/api/api/generate", {
                 method: "POST",
                 body: formData,
             });
@@ -236,7 +234,7 @@ export default function TechnicalProposal() {
             const finalDescription = `${boothApiText || ""}\n${boothUserText || ""}`.trim();
             console.log("FINAL DESCRIPTION:", finalDescription);
 
-            const url = "/api/api/v1/booth/generate?generate_ppt=true";
+            const url = "http://18.234.84.154/api/api/v1/booth/generate?generate_ppt=true";
 
             const payload = {
                 description: finalDescription,
@@ -301,7 +299,6 @@ export default function TechnicalProposal() {
         }
     };
 
-
     return (
         <div className="px-6 lg:px-12 xl:px-20 max-w-[1600px] mx-auto mt-10">
             {/* HEADER */}
@@ -327,8 +324,9 @@ export default function TechnicalProposal() {
                 </button>
 
                 <h1 className="text-3xl font-bold text-[#0F172A]">
-                    Technical Proposal
+                    {t("technicalProposal")}
                 </h1>
+
             </div>
 
             <p className="text-gray-500 mt-1">{fileName}</p>
@@ -361,10 +359,9 @@ export default function TechnicalProposal() {
                                                 🔍
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-semibold">RFP Analysis</h3>
-                                                <p className="text-gray-500 text-sm">
-                                                    Requirements extracted
-                                                </p>
+                                                <h3 className="text-lg font-semibold">{t("rfpAnalysis")}</h3>
+                                                <p className="text-gray-500 text-sm">{t("requirementsExtracted")}</p>
+
                                             </div>
                                         </div>
                                         {openCard === 1 ? <ChevronUp /> : <ChevronDown />}
@@ -374,19 +371,21 @@ export default function TechnicalProposal() {
                                         <div className="mt-5 space-y-5">
                                             {!activeRfpItem && (
                                                 <p className="text-gray-500">
-                                                    No RFP content found for this section.
+                                                    {t("noRfpContent")}
                                                 </p>
                                             )}
 
                                             {activeStep === 1 && (
                                                 <div className="p-4 bg-white rounded-xl border shadow-sm">
                                                     <h4 className="text-lg font-semibold">
-                                                        PROJECT INTRODUCTION
+                                                        {t("projectIntroduction")}
                                                     </h4>
 
-                                                    <p className="mt-2 text-gray-700 whitespace-pre-line leading-relaxed">
-                                                        {projectIntro}
-                                                    </p>
+                                                    <FormattedText
+                                                        text={projectIntro}
+                                                        className="mt-2 text-gray-700"
+                                                    />
+
                                                 </div>
                                             )}
 
@@ -397,9 +396,10 @@ export default function TechnicalProposal() {
                                                         {activeRfpKey.replace(/_/g, " ").toUpperCase()}
                                                     </h4>
 
-                                                    <p className="mt-2 text-gray-700 whitespace-pre-line leading-relaxed">
-                                                        {activeRfpItem.text}
-                                                    </p>
+                                                    <FormattedText
+                                                        text={activeRfpItem.text}
+                                                        className="mt-2 text-gray-700"
+                                                    />
                                                 </div>
                                             )}
                                         </div>
@@ -420,7 +420,10 @@ export default function TechnicalProposal() {
                                         </div>
                                         <div>
                                             <h3 className="text-lg font-semibold">
-                                                AI Writing Assistant
+                                                <h3 className="text-lg font-semibold">
+                                                    {t("aiWritingAssistant")}
+                                                </h3>
+
                                             </h3>
                                             <p className="text-gray-500 text-sm">{getTitle()}</p>
                                         </div>
@@ -462,16 +465,16 @@ export default function TechnicalProposal() {
                         {/* STEP 1 */}
                         {activeStep === 1 && (
                             <>
-                                <label className="block mt-6 font-medium">Client’s Name</label>
+                                <label className="block mt-6 font-medium">{t("clientName")}</label>
                                 <input
                                     type="text"
                                     className="w-full mt-2 p-4 rounded-2xl border shadow-sm"
-                                    placeholder="e.g. NCEC"
+                                    placeholder={t("clientNamePlaceholder")}
                                     value={clientName}
                                     onChange={(e) => setClientName(e.target.value)}
                                 />
 
-                                <label className="block mt-6 font-medium">Client’s Logo</label>
+                                <label className="block mt-6 font-medium">{t("clientLogo")}</label>
                                 <div className="mt-2 relative">
                                     <input
                                         type="file"
@@ -500,11 +503,11 @@ export default function TechnicalProposal() {
                                 </div>
 
                                 <label className="block mt-6 font-medium">
-                                    Project Overview
+                                    {t("projectOverview")}
                                 </label>
-                                <textarea
+                                <SmartTextarea
                                     className="w-full mt-2 p-4 rounded-2xl border h-40 shadow-sm"
-                                    placeholder="Provide a comprehensive overview..."
+                                    placeholder={t("projectOverviewPlaceholder")}
                                     value={projectOverview}
                                     onChange={(e) => setProjectOverview(e.target.value)}
                                 />
@@ -517,18 +520,16 @@ export default function TechnicalProposal() {
                         {activeStep === 2 && (
                             <>
                                 <label className="block mt-6 font-medium">
-                                    Company Introduction
+                                    {t("companyIntro")}
                                 </label>
 
-                                <textarea
-                                    className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm leading-loose"
+                                <SmartTextarea
                                     value={companyIntroText}
                                     onChange={(e) => setCompanyIntroText(e.target.value)}
+                                    rows={6}
                                 />
 
-                                <NavigationButtons {...{ handleNext }} disablePrev />
-
-
+                                <NavigationButtons {...{ handleNext, handlePrevious }} />
                             </>
                         )}
 
@@ -536,39 +537,26 @@ export default function TechnicalProposal() {
                         {activeStep === 3 && (
                             <>
                                 <label className="block mt-6 font-medium">
-                                    Methodology Narrative
+                                    {t("methodology")}
                                 </label>
-                                <textarea
+                                <SmartTextarea
                                     className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
-                                    placeholder="Describe your methodology..."
+                                    placeholder={t("methodologyPlaceholder")}
                                     value={methodologyNarrative}
                                     onChange={(e) => setMethodologyNarrative(e.target.value)}
                                 />
-
-                                <label className="block mt-6 font-medium">
-                                    Execution Plan Overview
-                                </label>
-                                <textarea
-                                    className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
-                                    placeholder="Detail the execution plan..."
-                                    value={executionPlanOverview}
-                                    onChange={(e) => setExecutionPlanOverview(e.target.value)}
-                                />
-
-                                <NavigationButtons {...{ handleNext }} disablePrev />
-
-
+                                <NavigationButtons {...{ handleNext, handlePrevious }} />
                             </>
                         )}
 
                         {/* STEP 4 */}
                         {activeStep === 4 && (
                             <>
-                                <label className="block mt-6 font-medium">Activity Steps</label>
+                                <label className="block mt-6 font-medium">{t("activitySteps")}</label>
 
-                                <textarea
+                                <SmartTextarea
                                     className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
-                                    placeholder="List the key activities & tasks..."
+                                    placeholder={t("activityStepsPlaceholder")}
                                     value={activitySteps}
                                     onChange={(e) => setActivitySteps(e.target.value)}
                                 />
@@ -580,11 +568,11 @@ export default function TechnicalProposal() {
                         {/* STEP 5 */}
                         {activeStep === 5 && (
                             <>
-                                <label className="block mt-6 font-medium">Scheduling Table</label>
+                                <label className="block mt-6 font-medium">{t("scheduling")}</label>
 
-                                <textarea
+                                <SmartTextarea
                                     className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
-                                    placeholder="Detail timeline, milestones & deadlines..."
+                                    placeholder={t("schedulingPlaceholder")}
                                     value={scheduleTable}
                                     onChange={(e) => setScheduleTable(e.target.value)}
                                 />
@@ -605,10 +593,10 @@ export default function TechnicalProposal() {
                         {activeStep === 7 && (
                             <>
                                 <label className="block mt-6 font-medium">
-                                    Enter Booth Description *
+                                    {t("boothDescription")}
                                 </label>
 
-                                <textarea
+                                <SmartTextarea
                                     className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
                                     placeholder="Add details for booth design..."
                                     defaultValue={boothApiText}
@@ -641,7 +629,7 @@ export default function TechnicalProposal() {
                         {/* STEP 8 */}
                         {activeStep === 8 && (
                             <>
-                                <label className="block mt-6 font-medium">Select Services</label>
+                                <label className="block mt-6 font-medium">{t("selectServices")}</label>
 
                                 <div className="grid grid-cols-3 gap-4 mt-4">
                                     {[
@@ -677,10 +665,10 @@ export default function TechnicalProposal() {
                                     ))}
                                 </div>
 
-                                <label className="block mt-6 font-medium">Other Add-ons</label>
-                                <textarea
+                                <label className="block mt-6 font-medium">{t("otherAddons")}</label>
+                                <SmartTextarea
                                     className="w-full mt-3 p-4 rounded-2xl border h-32 shadow-sm"
-                                    placeholder="List any additional services..."
+                                    placeholder={t("otherAddonsPlaceholder")}
                                     value={otherAddons}
                                     onChange={(e) => setOtherAddons(e.target.value)}
                                 />

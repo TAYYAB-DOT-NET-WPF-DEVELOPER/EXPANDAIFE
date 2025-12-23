@@ -1,6 +1,7 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 export default function Footer() {
+    const { t } = useTranslation();
     return (
         <footer className="w-full bg-white py-6 rounded-t-3xl shadow-sm">
             <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -20,7 +21,7 @@ export default function Footer() {
 
                 {/* RIGHT — COPYRIGHT */}
                 <p className="text-sm text-[#00000080]">
-                    © 2025 Expand. AI-powered proposal generation.
+                    © 2025 {t("footerText")}
                 </p>
             </div>
         </footer>
