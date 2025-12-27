@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -20,8 +20,11 @@ export default function TechnicalProposal() {
     /* ---------------------------
        RFP PAYLOAD FROM UPLOAD
     --------------------------- */
-    const payload = state?.payload || null;
-    const rfpData = payload?.proposal || {};
+    const payload =
+        state?.payload ||
+        JSON.parse(localStorage.getItem("rfp_payload") || "null");
+
+    const rfpData = payload || {};
 
     const projectIntro = rfpData?.project_introduction?.text || "";
     const contentsOfTechnical =
@@ -74,6 +77,10 @@ export default function TechnicalProposal() {
     // Step 7 – Booth design
     const [boothUserText, setBoothUserText] = useState("");
     const [loadingBooth, setLoadingBooth] = useState(false);
+    const [errors, setErrors] = useState({
+        clientName: "",
+        clientLogo: ""
+    });
 
     // Step 8 – Logistics extra text
     const [otherAddons, setOtherAddons] = useState("");
@@ -97,6 +104,17 @@ export default function TechnicalProposal() {
     const activeRfpKey = stepKeyMap[activeStep];
     const activeRfpItem =
         rfpData[activeRfpKey]?.found ? rfpData[activeRfpKey] : null;
+    const [selectedServices, setSelectedServices] = useState({
+        soundSystem: false,
+        lightingSystem: false,
+        hospitality: false,
+        gifts: false,
+        printing: false,
+        hotels: false,
+        airTickets: false,
+        staff: false,
+        equipment: false,
+    });
 
     const stepsList = [
         "stepProjectIntro",
@@ -112,11 +130,55 @@ export default function TechnicalProposal() {
 
     const [openCard, setOpenCard] = useState(1);
     const toggleCard = (id) => setOpenCard(openCard === id ? null : id);
+    useEffect(() => {
+        if (!rfpData || Object.keys(rfpData).length === 0) return;
+
+        setMethodologyNarrative(
+            rfpData?.methodology_for_executing_services?.text || ""
+        );
+
+        setActivitySteps(
+            rfpData?.action_plan?.text || ""
+        );
+
+        setScheduleTable(
+            rfpData?.execution_schedule?.text || ""
+        );
+
+        setProjectOverview(
+            rfpData?.contents_of_technical_proposal?.text || ""
+        );
+
+    }, [rfpData]);
+    
 
     /* --------------------------------------------------------
        NEXT / PREVIOUS
     --------------------------------------------------------- */
     const handleNext = async () => {
+        if (activeStep === 1) {
+            const newErrors = {
+                clientName: "",
+                clientLogo: ""
+            };
+
+            if (!clientName.trim()) {
+                newErrors.clientName = t("clientNameRequired");
+            }
+
+            if (!clientLogoFile) {
+                newErrors.clientLogo = t("clientLogoRequired");
+            }
+
+            if (newErrors.clientName || newErrors.clientLogo) {
+                setErrors(newErrors);
+                return; // ❌ STOP NEXT
+            }
+
+            // ✅ clear errors if valid
+            setErrors({ clientName: "", clientLogo: "" });
+        }
+
         if (activeStep < 8) {
             setActiveStep((prev) => prev + 1);
             return;
@@ -157,8 +219,10 @@ export default function TechnicalProposal() {
                 clientProjectName,
                 clientLogoPath: clientLogoFile?.name || "",
                 selectedTemplate,
-                boothPptPath
+                boothPptPath,
+                selectedServices
             });
+         
 
             const formData = new FormData();
             formData.append(
@@ -175,19 +239,22 @@ export default function TechnicalProposal() {
             formData.append("builtin_file_4", "");
             formData.append("builtin_file_5", "");
 
-            const response = await fetch("http://18.234.84.154/api/api/generate", {
+            const response = await fetch("http://18.234.84.154/api/generate", {
                 method: "POST",
+
                 body: formData,
             });
 
             const blob = await response.blob();
             const fileUrl = URL.createObjectURL(blob);
-
+            console.log(fileUrl);
+            console.log(state.selectedTemplate);
             navigate("/technical-proposal-preview", {
                 state: {
                     fileName,
                     pptUrl: fileUrl,
                     pptBlob: blob,
+                    selectedTemplate,
                 },
             });
         } catch (err) {
@@ -203,26 +270,29 @@ export default function TechnicalProposal() {
         if (activeStep > 1) setActiveStep((prev) => prev - 1);
     };
 
-    const getTitle = () => stepsList[activeStep - 1];
+    const getTitle = () => t(stepsList[activeStep - 1]);
+
 
     const getSubtitle = () => {
         switch (activeStep) {
             case 1:
-                return "Describe the project overview";
+                return t("subtitleProjectOverview");
             case 2:
-                return "Introduce your company";
+                return t("subtitleCompanyIntro");
             case 3:
-                return "Explain your methodology & execution strategy";
+                return t("subtitleMethodology");
             case 4:
-                return "Define the activity steps";
+                return t("subtitleActionPlan");
             case 5:
-                return "Define the project timeline";
+                return t("subtitleExecutionSchedule");
             case 6:
-                return "Generate AI-powered booth visualizations";
+                return t("subtitleBooth");
             default:
                 return "";
         }
     };
+
+    const isMarkdownTable = scheduleTable?.includes("|");
 
     /* --------------------------------------------------------
        BOOTH GENERATION (unchanged logic – only combined text)
@@ -261,7 +331,7 @@ export default function TechnicalProposal() {
                 lighting_mood: "bright",
                 material_preferences: []
             };
-
+            debugger;
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -284,7 +354,10 @@ export default function TechnicalProposal() {
 
             // save to state
             setBoothImageUrl(fullImageUrl);
-            const boothPptPath = data.ppt_path;
+            console.log("Booth ppt_path:", data.ppt_path);
+            const boothPptPath = data.ppt_path?.replace(/^\/+/, "");
+            console.log("Booth PPT Path:", boothPptPath);
+
 
             // ⭐ ADD THIS LINE
             setBoothPptPath(boothPptPath);
@@ -355,15 +428,26 @@ export default function TechnicalProposal() {
                                 >
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center">
-                                                🔍
+                                            {/* ICON */}
+                                            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                                                <img
+                                                    src="/assets/icons/rfp-icon.svg"
+                                                    alt="RFP Analysis Icon"
+                                                    className="w-6 h-6"
+                                                />
                                             </div>
-                                            <div>
-                                                <h3 className="text-lg font-semibold">{t("rfpAnalysis")}</h3>
-                                                <p className="text-gray-500 text-sm">{t("requirementsExtracted")}</p>
 
+                                            {/* TEXT */}
+                                            <div>
+                                                <h3 className="text-lg font-semibold">
+                                                    {t("rfpAnalysis")}
+                                                </h3>
+                                                <p className="text-gray-500 text-sm">
+                                                    {t("requirementsExtracted")}
+                                                </p>
                                             </div>
                                         </div>
+
                                         {openCard === 1 ? <ChevronUp /> : <ChevronDown />}
                                     </div>
 
@@ -415,19 +499,26 @@ export default function TechnicalProposal() {
                             >
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-green-600 text-white rounded-xl flex items-center justify-center">
-                                            ✨
+                                        {/* ICON */}
+                                        <div className="w-12 h-12 bg-[#12B886] rounded-xl flex items-center justify-center flex-shrink-0">
+                                            <img
+                                                src="/assets/icons/ai-icon.svg"
+                                                alt="AI Icon"
+                                                className="w-6 h-6"
+                                            />
                                         </div>
+
+                                        {/* TEXT */}
                                         <div>
                                             <h3 className="text-lg font-semibold">
-                                                <h3 className="text-lg font-semibold">
-                                                    {t("aiWritingAssistant")}
-                                                </h3>
-
+                                                {t("aiWritingAssistant")}
                                             </h3>
-                                            <p className="text-gray-500 text-sm">{getTitle()}</p>
+                                            <p className="text-gray-500 text-sm">
+                                                {getTitle()}
+                                            </p>
                                         </div>
                                     </div>
+
                                     {openCard === 4 ? <ChevronUp /> : <ChevronDown />}
                                 </div>
                             </div>
@@ -441,19 +532,53 @@ export default function TechnicalProposal() {
                             <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center text-xl">
                                 {activeStep === 1
                                     ? "📘"
-                                    : activeStep === 2
-                                        ? "🏢"
-                                        : activeStep === 3
-                                            ? "🛠️"
-                                            : activeStep === 4
-                                                ? "📋"
-                                                : activeStep === 5
-                                                    ? "📅"
-                                                    : activeStep === 6
-                                                        ? "🪑"
-                                                        : activeStep === 7
-                                                            ? "🖼️"
-                                                            : "🧰"}
+                                    : activeStep === 2 ? (
+                                        <img
+                                            src="/assets/icons/company-brief.svg"
+                                            alt="Company Brief"
+                                            className="w-5 h-5"
+                                        />
+                                    )
+                                        : activeStep === 3 ? (
+                                            <img
+                                                src="/assets/icons/methodology.svg"
+                                                alt="Company Brief"
+                                                className="w-5 h-5"
+                                            />
+                                        )
+                                            : activeStep === 4 ? (
+                                                <img
+                                                    src="/assets/icons/action-plan.svg"
+                                                    alt="Company Brief"
+                                                    className="w-5 h-5"
+                                                />
+                                            )
+                                                : activeStep === 5 ? (
+                                                    <img
+                                                        src="/assets/icons/execution.svg"
+                                                        alt="Company Brief"
+                                                        className="w-5 h-5"
+                                                    />
+                                                )
+                                                    : activeStep === 6 ? (
+                                                        <img
+                                                            src="/assets/icons/furniture.svg"
+                                                            alt="Company Brief"
+                                                            className="w-5 h-5"
+                                                        />
+                                                    )
+                                                        : activeStep === 7 ? (
+                                                            <img
+                                                                src="/assets/icons/booth-icon.svg"
+                                                                alt="Company Brief"
+                                                                className="w-5 h-5"
+                                                            />
+                                                        )
+                                                            : <img
+                                                                src="/assets/icons/logistics.svg"
+                                                                alt="Company Brief"
+                                                                className="w-5 h-5"
+                                                            />}
                             </div>
 
                             <div>
@@ -465,43 +590,62 @@ export default function TechnicalProposal() {
                         {/* STEP 1 */}
                         {activeStep === 1 && (
                             <>
-                                <label className="block mt-6 font-medium">{t("clientName")}</label>
+                                <label className="block mt-6 font-medium">
+                                    {t("clientName")} <span className="text-red-500">*</span>
+                                </label>
+
                                 <input
                                     type="text"
-                                    className="w-full mt-2 p-4 rounded-2xl border shadow-sm"
+                                    className={`w-full mt-2 p-4 rounded-2xl border shadow-sm transition
+        ${errors.clientName
+                                            ? "border-red-500 bg-red-50"
+                                            : "border-gray-200"}
+    `}
                                     placeholder={t("clientNamePlaceholder")}
                                     value={clientName}
-                                    onChange={(e) => setClientName(e.target.value)}
+                                    onChange={(e) => {
+                                        setClientName(e.target.value);
+                                        setErrors({ ...errors, clientName: "" });
+                                    }}
                                 />
 
-                                <label className="block mt-6 font-medium">{t("clientLogo")}</label>
+                                {errors.clientName && (
+                                    <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                        ⚠️ {errors.clientName}
+                                    </p>
+                                )}
+
+
+                                <label className="block mt-6 font-medium">
+                                    {t("clientLogo")} <span className="text-red-500">*</span>
+                                </label>
                                 <div className="mt-2 relative">
                                     <input
                                         type="file"
                                         accept="image/png"
-                                        className="w-full p-4 pr-12 border rounded-2xl bg-gray-50 shadow-sm cursor-pointer text-gray-600"
-                                        onChange={(e) =>
-                                            setClientLogoFile(e.target.files?.[0] || null)
-                                        }
+                                        className={`w-full p-4 pr-12 rounded-2xl cursor-pointer shadow-sm transition
+                                        ${errors.clientLogo
+                                                ? "border border-red-500 bg-red-50"
+                                                : "border border-gray-200 bg-gray-50"}
+                                                        `}
+                                        onChange={(e) => {
+                                            setClientLogoFile(e.target.files?.[0] || null);
+                                            setErrors({ ...errors, clientLogo: "" });
+                                        }}
                                     />
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="w-6 h-6"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 7.5m0 0L7.5 12m4.5-4.5V15"
-                                            />
-                                        </svg>
+                                        <img
+                                            src="/assets/icons/file_upload.svg"
+                                            alt="Company Brief"
+                                            className="w-5 h-5"
+                                        />
                                     </div>
                                 </div>
-
+                                {errors.clientLogo && (
+                                    <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                        ⚠️ {errors.clientLogo}
+                                    </p>
+                                )}
                                 <label className="block mt-6 font-medium">
                                     {t("projectOverview")}
                                 </label>
@@ -570,12 +714,20 @@ export default function TechnicalProposal() {
                             <>
                                 <label className="block mt-6 font-medium">{t("scheduling")}</label>
 
-                                <SmartTextarea
-                                    className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
-                                    placeholder={t("schedulingPlaceholder")}
-                                    value={scheduleTable}
-                                    onChange={(e) => setScheduleTable(e.target.value)}
-                                />
+                                {isMarkdownTable ? (
+                                    <FormattedText
+                                        text={scheduleTable}
+                                        className="mt-3"
+                                    />
+                                ) : (
+                                    <SmartTextarea
+                                        className="w-full mt-3 p-4 rounded-2xl border h-40 shadow-sm"
+                                        placeholder={t("schedulingPlaceholder")}
+                                        value={scheduleTable}
+                                        onChange={(e) => setScheduleTable(e.target.value)}
+                                    />
+                                )}
+
 
                                 <NavigationButtons {...{ handleNext, handlePrevious }} />
                             </>
@@ -607,10 +759,15 @@ export default function TechnicalProposal() {
                                     <button
                                         onClick={generateBoothDesign}
                                         disabled={loadingBooth}
-                                        className="px-10 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl shadow disabled:opacity-50"
+                                        className="px-10 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl shadow disabled:opacity-50 flex items-center gap-2"
                                     >
-                                        {loadingBooth ? "Generating..." : "Generate Booth Design"}
+                                        {loadingBooth
+                                            ? t("generating")
+                                            : boothImageUrl
+                                                ? t("regenerateBooth")
+                                                : t("generateBooth")}
                                     </button>
+
                                 </div>
                                 {boothImageUrl && (
                                     <div className="flex justify-center mt-6">
@@ -629,41 +786,64 @@ export default function TechnicalProposal() {
                         {/* STEP 8 */}
                         {activeStep === 8 && (
                             <>
-                                <label className="block mt-6 font-medium">{t("selectServices")}</label>
+                                <label className="block mt-6 text-sm font-medium whitespace-nowrap">{t("selectServices")}</label>
 
                                 <div className="grid grid-cols-3 gap-4 mt-4">
                                     {[
-                                        { name: "Sound system", icon: "🔊" },
-                                        { name: "Lighting System", icon: "💡" },
-                                        { name: "Hospitality", icon: "🍽️" },
-                                        { name: "Suggested Gifts", icon: "🎁" },
-                                        { name: "Printing Material", icon: "🖨️" },
-                                        { name: "Suggested Hotels", icon: "🏨" },
-                                        { name: "Air Tickets", icon: "✈️" },
-                                        { name: "Staff", icon: "👥" },
-                                        { name: "Equipment", icon: "🛠️" },
+                                        { key: "soundSystem", icon: "/assets/icons/volume_up.svg" },
+                                        { key: "lightingSystem", icon: "/assets/icons/lightbulb.svg" },
+                                        { key: "hospitality", icon: "/assets/icons/coffee.svg" },
+                                        { key: "gifts", icon: "/assets/icons/card_giftcard.svg" },
+                                        { key: "printing", icon: "/assets/icons/print.svg" },
+                                        { key: "hotels", icon: "/assets/icons/hotel.svg" },
+                                        { key: "airTickets", icon: "/assets/icons/flight.svg" },
+                                        { key: "staff", icon: "/assets/icons/people_alt.svg" },
+                                        { key: "equipment", icon: "/assets/icons/construction.svg" }
                                     ].map((item, index) => (
                                         <div
                                             key={index}
                                             className="flex items-center justify-between p-4 border rounded-2xl bg-gray-50 shadow-sm"
                                         >
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl">
-                                                    {item.icon}
+                                                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                                                    {item.icon.endsWith(".svg") ? (
+                                                        <img
+                                                            src={item.icon}
+                                                            alt={item.key}
+                                                            className="w-5 h-5"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-xl text-blue-600">
+                                                            {item.icon}
+                                                        </span>
+                                                    )}
                                                 </div>
+
                                                 <span className="text-gray-700 font-medium">
-                                                    {item.name}
+                                                    {t(item.key)}
                                                 </span>
                                             </div>
 
                                             <label className="relative inline-flex items-center cursor-pointer">
-                                                <input type="checkbox" className="sr-only peer" />
+                                                <input
+                                                    type="checkbox"
+                                                    className="sr-only peer"
+                                                    checked={selectedServices[item.key]}
+                                                    onChange={() =>
+                                                        setSelectedServices((prev) => ({
+                                                            ...prev,
+                                                            [item.key]: !prev[item.key],
+                                                        }))
+                                                    }
+                                                />
+
                                                 <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition"></div>
                                                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition"></div>
                                             </label>
                                         </div>
                                     ))}
                                 </div>
+
 
                                 <label className="block mt-6 font-medium">{t("otherAddons")}</label>
                                 <SmartTextarea
@@ -700,6 +880,7 @@ function NavigationButtons({
     disableNext,
     loadingPpt,
 }) {
+    const { t } = useTranslation();
 
     return (
         <div className="flex justify-between mt-8">
@@ -708,7 +889,7 @@ function NavigationButtons({
                 onClick={handlePrevious}
                 className="px-8 py-3 rounded-2xl border disabled:opacity-40"
             >
-                ← Previous
+                ← {t("previous")}
             </button>
 
             {!disableNext && (
@@ -717,7 +898,7 @@ function NavigationButtons({
                     onClick={handleNext}
                     className="px-10 py-3 bg-blue-600 text-white rounded-2xl shadow disabled:opacity-40"
                 >
-                    {loadingPpt ? "Generating PPT..." : "Next →"}
+                    {loadingPpt ? t("generatingPpt") : `${t("next")} →`}
                 </button>
 
 
@@ -749,12 +930,13 @@ function FurnitureSample() {
     const itemTotal = (item) => item.qty * item.price;
 
     const grandTotal = items.reduce((sum, item) => sum + itemTotal(item), 0);
-
+    const { t } = useTranslation();
     return (
+
         <div>
             <div className="flex justify-end mb-4">
                 <button onClick={addItem} className="px-4 py-2 bg-gray-200 rounded-xl">
-                    + Add Item
+                    + {t("addItem")}
                 </button>
             </div>
 
@@ -785,7 +967,7 @@ function FurnitureSample() {
                             type="number"
                             className="p-3 border rounded-xl"
                             min="0"
-                            placeholder="Price"
+                            placeholder={t("price")}
                             value={item.price}
                             onChange={(e) =>
                                 updateItem(index, "price", Number(e.target.value))
@@ -809,7 +991,7 @@ function FurnitureSample() {
             </div>
 
             <div className="text-right mt-6 text-xl font-bold">
-                Total Furniture Cost: SAR {grandTotal.toLocaleString()}
+                {t("totalFurnitureCost")}: SAR {grandTotal.toLocaleString()}
             </div>
         </div>
     );

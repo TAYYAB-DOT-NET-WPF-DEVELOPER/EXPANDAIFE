@@ -16,7 +16,8 @@ export default function Navbar() {
   const menuItems = [
     { path: "/", key: "home" },
     { path: "/proposals", key: "proposals" },
-    { path: "/templates", key: "templates" }
+    { path: "/templates", key: "templates" },
+    //{ path: "/templates", key: "Go to Dashboard" }
   ];
 
   return (

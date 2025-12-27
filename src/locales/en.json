@@ -87,7 +87,33 @@
   "stepFurniture": "Furniture Sample",
   "stepBooth": "Booth Design",
   "stepLogistics": "Logistics & Services",
-  "projectIntroduction": "Project Introduction"
+  "projectIntroduction": "Project Introduction",
+  "subtitleProjectOverview": "Describe the project overview",
+  "subtitleCompanyIntro": "Introduce your company",
+  "subtitleMethodology": "Explain your methodology & execution strategy",
+  "subtitleActionPlan": "Define the activity steps",
+  "subtitleExecutionSchedule": "Define the project timeline",
+  "subtitleBooth": "Generate AI-powered booth visualizations",
+
+  "soundSystem": "Sound System",
+  "lightingSystem": "Lighting System",
+  "hospitality": "Hospitality",
+  "gifts": "Suggested Gifts",
+  "printing": "Printing Material",
+  "hotels": "Suggested Hotels",
+  "airTickets": "Air Tickets",
+  "staff": "Staff",
+  "equipment": "Equipment",
+  "technicalProposalPreview": "Technical Proposal Preview",
+  "reviewPresentation": "Review your generated presentation",
+  "download": "Download",
+  "regenerate": "Regenerate",
+  "changeTemplate": "Change Template",
+  "generateFinancialSheet": "Generate Financial Sheet",
+  
+  "regenerateBooth": "Regenerate Booth Design",
+  "clientNameRequired": "Client name is required",
+  "clientLogoRequired": "Client logo is required"
 
 
 }

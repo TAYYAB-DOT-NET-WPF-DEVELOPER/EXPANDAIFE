@@ -7,6 +7,8 @@ import SelectTemplate from "./pages/SelectTemplate";
 import Footer from "./components/Footer";
 import ProposalsPage from "./pages/ProposalsPage";
 import TemplatesPage from "./pages/TemplatesPage";
+import FinancialProposal from "./pages/FinancialProposal";
+
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
         <Route path="/select-template" element={<SelectTemplate />} />
         <Route path="/proposals" element={<ProposalsPage />} />
         <Route path="/templates" element={<TemplatesPage />} />
+        <Route path="/financial-proposal" element={<FinancialProposal />} />
+
       </Routes>
       <Footer />
     </BrowserRouter>

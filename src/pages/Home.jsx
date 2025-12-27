@@ -63,7 +63,10 @@ export default function Home() {
       }
 
       // SUCCESS
-      setApiResponse(data);
+    // after successful API response
+setApiResponse(data);
+localStorage.setItem("rfp_payload", JSON.stringify(data));
+
       setLoading(false);
       return true;
 

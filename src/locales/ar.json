@@ -87,8 +87,37 @@
   "stepFurniture": "نماذج الأثاث",
   "stepBooth": "تصميم الجناح",
   "stepLogistics": "الخدمات اللوجستية",
-  "projectIntroduction": "مقدمة المشروع"
+  "projectIntroduction": "مقدمة المشروع",
+  
+  "subtitleProjectOverview": "وصف نظرة عامة على المشروع",
+  "subtitleCompanyIntro": "التعريف بالشركة",
+  "subtitleMethodology": "شرح المنهجية وخطة التنفيذ",
+  "subtitleActionPlan": "تحديد خطوات التنفيذ",
+  "subtitleExecutionSchedule": "تحديد الجدول الزمني للمشروع",
+  "subtitleBooth": "إنشاء تصاميم أجنحة مدعومة بالذكاء الاصطناعي",
 
+  
+  "soundSystem": "نظام صوتي",
+  "lightingSystem": "نظام إضاءة",
+  "hospitality": "الضيافة",
+  "gifts": "هدايا مقترحة",
+  "printing": "مواد الطباعة",
+  "hotels": "فنادق مقترحة",
+  "airTickets": "تذاكر طيران",
+  "staff": "الطاقم",
+  "equipment": "معدات",
+  "technicalProposalPreview": "معاينة العرض الفني",
+  "reviewPresentation": "راجع العرض التقديمي الذي تم إنشاؤه",
+  "download": "تحميل",
+  "regenerate": "إعادة الإنشاء",
+  "changeTemplate": "تغيير القالب",
+  "generateFinancialSheet": "إنشاء ورقة مالية",
+  "regenerateBooth": "إعادة إنشاء تصميم الجناح",
+  "clientNameRequired": "اسم العميل مطلوب",
+  "clientLogoRequired": "شعار العميل مطلوب",
+  "defaultCompanyIntro": "تُعد أكسباند قوة رائدة في تنظيم الفعاليات المحلية والدولية وبناء المعارض — بدءًا من توليد الفكرة وتطبيق أحدث تقنيات البناء، وصولًا إلى تجهيزات الافتتاح، وإدارة الحشود، والتغطية الكاملة للحدث.\n\nنعتمد على خبرة تتجاوز 20 عامًا، جمعت نخبة من الكفاءات متعددة التخصصات، مع قدرة عالية على التكيف مع المتغيرات.\n\nويلتزم فريقنا بالتميّز والجودة والدقة في الوقت، من خلال شراكات استراتيجية مع الموردين لتنفيذ مشاريع مؤثرة داخل المملكة وخارجها."
+
+ 
 
 
 }

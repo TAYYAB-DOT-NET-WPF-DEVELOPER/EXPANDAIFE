@@ -1,0 +1,172 @@
+{
+  "config": {
+    "project_name": "تفعيل وادارة أنشطة هيئة الحكومة الرقمية في المؤتمرات والمعارض",
+    "language": "ar",
+    "template_path": "given_sample.pptx",
+    "company_logo": "builtin_data/expand_logo.png",
+    "client_logo": "builtin_data/client_logo.png",
+    "company_logo_width": 1.2,
+    "company_logo_height": 0.4,
+    "first_slide_company_logo_width": 1.5,
+    "first_slide_company_logo_height": 0.5,
+    "client_logo_width": 2.5,
+    "client_logo_height": 1.8,
+    "output_name": ""
+  },
+  "topics": [
+    {
+      "topic": "محتويات العرض الفني",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "مقدمة المشروع",
+        "نبذة عن الشركة",
+        "منهجية تنفيذ الخدمات"
+      ]
+    },
+    {
+      "topic": "مقدمة المشروع",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "نظرة عامة على المشروع",
+        "الأهداف الرئيسية",
+        "النطاق والتسليمات"
+      ]
+    },
+    {
+      "topic": "نبذة عن الشركة",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "تاريخ تأسيس الشركة",
+        "رؤيتنا ورسالتنا",
+        "خبرتنا في المجال"
+      ]
+    },
+    {
+      "topic": "منهجية تنفيذ الخدمات",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "مراحل العمل",
+        "معايير الجودة",
+        "إدارة المشروع"
+      ]
+    },
+    {
+      "topic": "خطة العمل",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "المراحل الزمنية",
+        "التسليمات الرئيسية",
+        "نقاط المتابعة"
+      ]
+    },
+    {
+      "topic": "جدول التنفيذ",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "الجدول الزمني التفصيلي",
+        "المعالم الرئيسية",
+        "تواريخ التسليم"
+      ]
+    },
+    {
+      "topic": "تصاميم الأجنحة المقترحة",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": [
+        "المفاهيم التصميمية",
+        "التخطيط المكاني",
+        "العناصر البصرية"
+      ]
+    },
+    {
+      "topic": "نظام الصوت",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/Sound_System.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "نظام الإضاءة",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/light_system.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "خدمات الضيافة",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/Hospitality_Services.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "الهدايا المقترحة",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/Gifts.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "التصوير الفوتوغرافي",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/Photography.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "الفنادق المقترحة",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": []
+    },
+    {
+      "topic": "شركاؤنا الخارجيون",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": []
+    },
+    {
+      "topic": "اتفاقيات الموردين",
+      "included": true,
+      "has_builtin": false,
+      "builtin_ppt_path": "",
+      "bullets": []
+    },
+    {
+      "topic": "فريق العمل",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/team.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "عملاؤنا المميزون",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/clients.pptx",
+      "bullets": []
+    },
+    {
+      "topic": "مشاريع سابقة للأجنحة",
+      "included": true,
+      "has_builtin": true,
+      "builtin_ppt_path": "builtin_data/projects.pptx",
+      "bullets": []
+    }
+  ]
+}
