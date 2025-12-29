@@ -1,12 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import TEMPLATE_LIST from "../data/templates";
 
-// ✅ IMPORTANT: match this import with your templates file export
-import  TEMPLATE_LIST  from "../data/templates";
-
-// agar aap named export use kar rahe ho, to ye line hogi:
-// import { TEMPLATE_LIST } from "../data/templates";
 
 export default function TechnicalProposalPreview() {
     const navigate = useNavigate();
@@ -15,6 +11,10 @@ export default function TechnicalProposalPreview() {
 
     const pptUrl = state?.pptUrl;
     const selectedTemplateId = state?.selectedTemplate;
+    const clientName = state?.clientName || "Technical_Proposal";
+    const downloadFileName = `${clientName}`.replace(/[^\w\u0600-\u06FF]+/g, "_") + ".pptx";
+
+
 
     // ✅ SAFETY GUARD (NO LOGIC CHANGE)
     const templates = Array.isArray(TEMPLATE_LIST) ? TEMPLATE_LIST : [];
@@ -58,7 +58,7 @@ export default function TechnicalProposalPreview() {
                         if (!pptUrl) return;
                         const a = document.createElement("a");
                         a.href = pptUrl;
-                        a.download = "Technical_Proposal.pptx";
+                        a.download = downloadFileName;
                         a.click();
                     }}
                     className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow flex items-center gap-2 hover:bg-blue-700 transition"
@@ -76,7 +76,8 @@ export default function TechnicalProposalPreview() {
             <div className="bg-white shadow-xl p-2 rounded-3xl">
                 <div className="bg-[#0F172A] text-white px-6 py-3 rounded-2xl flex items-center gap-3">
                     <span>📄</span>
-                    <span className="text-sm">Technical_Proposal.pptx</span>
+                    <span className="text-sm">{downloadFileName}</span>
+
                 </div>
 
                 <img
@@ -94,9 +95,10 @@ export default function TechnicalProposalPreview() {
                         if (!pptUrl) return;
                         const a = document.createElement("a");
                         a.href = pptUrl;
-                        a.download = "Technical_Proposal.pptx";
+                        a.download = downloadFileName;
                         a.click();
                     }}
+
                     className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow flex items-center gap-2"
                 >
                     <img

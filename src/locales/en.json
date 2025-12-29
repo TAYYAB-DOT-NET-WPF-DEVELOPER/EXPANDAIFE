@@ -113,7 +113,27 @@
   
   "regenerateBooth": "Regenerate Booth Design",
   "clientNameRequired": "Client name is required",
-  "clientLogoRequired": "Client logo is required"
+  "clientLogoRequired": "Client logo is required",
+  "defaultCompanyIntro": "Expand is a leading force in organizing local and international events and exhibition construction—from concept development and the application of cutting-edge construction technologies to grand opening arrangements, crowd management, and comprehensive event coverage.\n\nWe draw on over 20 years of experience, bringing together a select group of multidisciplinary talents with a high capacity for adapting to changing circumstances.\n\nOur team is committed to excellence, quality, and on-time delivery, through strategic partnerships with suppliers to execute impactful projects both within the Kingdom and internationally.",
+  "boothSize": "Booth Size",
+  "primaryColors": "Primary Colors",
+  "eventType": "Event Type",
+  "designStyle": "Design Style",
+  "trade show": "Trade Show",
+    "corporate event": "Corporate Event",
+    "tech conference": "Tech Conference",
+    "product launch": "Product Launch",
+    "B2B exhibition": "B2B Exhibition",
+    "industry expo": "Industry Expo",
+    "government summit": "Government Summit",
+    "defense exhibition": "Defense Exhibition",
+    "modern minimalist": "Modern Minimalist",
+    "corporate professional": "Corporate Professional",
+    "tech futuristic": "Tech Futuristic",
+    "luxury premium": "Luxury Premium",
+    "eco sustainable": "Eco Sustainable",
+    "creative vibrant": "Creative Vibrant"
+
 
 
 }

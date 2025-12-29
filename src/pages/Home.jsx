@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Sparkles, Check, X, FileText, Calculator } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
 export default function Home() {
   const fileInput = useRef(null);
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ export default function Home() {
       }
 
       const data = await res.json();
+      console.log("API RESPONSE:", data);
 
       // ❌ API returned error
       if (data.error || data.status === "error") {

@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 export default function TechnicalProposal() {
     const { state } = useLocation();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const fileName = state?.fileName || "Document.pdf";
 
     /* ---------------------------
@@ -54,9 +54,15 @@ export default function TechnicalProposal() {
     // Step 2 – Company brief
     const defaultCompanyIntro =
         "تُعد أكسباند قوة رائدة في تنظيم الفعاليات المحلية والدولية وبناء المعارض — بدءًا من توليد الفكرة وتطبيق أحدث تقنيات البناء، وصولًا إلى تجهيزات الافتتاح، وإدارة الحشود، والتغطية الكاملة للحدث.\nنعتمد على خبرة تتجاوز 20 عامًا، جمعت نخبة من الكفاءات متعددة التخصصات، مع قدرة عالية على التكيف مع المتغيرات.\nويلتزم فريقنا بالتميّز والجودة والدقة في الوقت، من خلال شراكات استراتيجية مع الموردين لتنفيذ مشاريع مؤثرة داخل المملكة وخارجها.";
+    // const [companyIntroText, setCompanyIntroText] = useState(
+    //     defaultCompanyIntro
+    // );
     const [companyIntroText, setCompanyIntroText] = useState(
-        defaultCompanyIntro
+        t("defaultCompanyIntro")
     );
+    useEffect(() => {
+        setCompanyIntroText(t("defaultCompanyIntro"));
+    }, [i18n.language]);
 
     // Step 3 – Methodology
     const [methodologyNarrative, setMethodologyNarrative] = useState(
@@ -99,6 +105,7 @@ export default function TechnicalProposal() {
         7: "proposed_booth_designs",
         8: "logistics_services",
     };
+    const [boothSuccess, setBoothSuccess] = useState("");
 
     const [activeStep, setActiveStep] = useState(1);
     const activeRfpKey = stepKeyMap[activeStep];
@@ -127,8 +134,33 @@ export default function TechnicalProposal() {
         "stepLogistics",
     ];
 
+    const EVENT_TYPES = [
+        "trade show",
+        "corporate event",
+        "tech conference",
+        "product launch",
+        "B2B exhibition",
+        "industry expo",
+        "government summit",
+        "defense exhibition"
+    ];
+
+    const DESIGN_STYLES = [
+        "modern minimalist",
+        "corporate professional",
+        "tech futuristic",
+        "luxury premium",
+        "eco sustainable",
+        "creative vibrant"
+    ];
 
     const [openCard, setOpenCard] = useState(1);
+    // Step 7 – Booth extra fields
+    const [boothSize, setBoothSize] = useState("6m x 3m");
+    const [primaryColors, setPrimaryColors] = useState("blue and white");
+    const [eventType, setEventType] = useState("trade show");
+    const [designStyle, setDesignStyle] = useState("modern minimalist");
+
     const toggleCard = (id) => setOpenCard(openCard === id ? null : id);
     useEffect(() => {
         if (!rfpData || Object.keys(rfpData).length === 0) return;
@@ -150,7 +182,7 @@ export default function TechnicalProposal() {
         );
 
     }, [rfpData]);
-    
+
 
     /* --------------------------------------------------------
        NEXT / PREVIOUS
@@ -222,7 +254,7 @@ export default function TechnicalProposal() {
                 boothPptPath,
                 selectedServices
             });
-         
+
 
             const formData = new FormData();
             formData.append(
@@ -247,14 +279,15 @@ export default function TechnicalProposal() {
 
             const blob = await response.blob();
             const fileUrl = URL.createObjectURL(blob);
-            console.log(fileUrl);
-            console.log(state.selectedTemplate);
+            // console.log(fileUrl);
+            //   console.log(state.selectedTemplate);
             navigate("/technical-proposal-preview", {
                 state: {
                     fileName,
                     pptUrl: fileUrl,
                     pptBlob: blob,
                     selectedTemplate,
+                    clientName,
                 },
             });
         } catch (err) {
@@ -302,36 +335,39 @@ export default function TechnicalProposal() {
             setLoadingBooth(true);
 
             const finalDescription = `${boothApiText || ""}\n${boothUserText || ""}`.trim();
-            console.log("FINAL DESCRIPTION:", finalDescription);
+            // console.log("FINAL DESCRIPTION:", finalDescription);
 
             const url = "http://18.234.84.154/api/api/v1/booth/generate?generate_ppt=true";
 
             const payload = {
-                description: finalDescription,
+                description: finalDescription || "Exhibition booth design",
                 project_name: clientName || "Default Project",
-                client_name: clientName || "",
-                booth_type: "media_wall",
-                event_type: "trade_show",
-                booth_size: "6x6",
+                client_name: clientName || "Client",
+
+                booth_type: "Modern tech booth with LED walls",
+                event_type: eventType,
+                booth_size: boothSize,
                 event_date: "2025-12-10",
                 venue_location: "Riyadh",
+
                 overall_layout: "Open layout with reception + display area",
-                structural_elements: "",
-                furniture_seating: "",
-                key_features: "",
-                technology_screens: "",
-                signage_branding: "",
-                decorative_elements: "",
+                structural_elements: "Standard aluminum structure",
+                furniture_seating: "Reception desk, stools",
+                key_features: "LED wall, branding panels",
+                technology_screens: "Large LED screen",
+                signage_branding: "Company logo and slogan",
+                decorative_elements: "Modern minimal decor",
+
                 include_people: true,
                 staff_count: 10,
                 visitor_count: 30,
-                primary_colors: "",
+
+                primary_colors: primaryColors,
                 secondary_colors: "",
-                design_style: "modern",
+                design_style: designStyle,
                 lighting_mood: "bright",
                 material_preferences: []
             };
-            debugger;
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -346,7 +382,7 @@ export default function TechnicalProposal() {
             }
 
             const data = await response.json();
-            console.log("Booth Response:", data);
+            // console.log("Booth Response:", data);
             const localUrl = data?.images?.[0]?.local_url || "";
 
             // create final full URL
@@ -354,15 +390,15 @@ export default function TechnicalProposal() {
 
             // save to state
             setBoothImageUrl(fullImageUrl);
-            console.log("Booth ppt_path:", data.ppt_path);
+            // console.log("Booth ppt_path:", data.ppt_path);
             const boothPptPath = data.ppt_path?.replace(/^\/+/, "");
-            console.log("Booth PPT Path:", boothPptPath);
-
-
-            // ⭐ ADD THIS LINE
+            // console.log("Booth PPT Path:", boothPptPath);
             setBoothPptPath(boothPptPath);
 
-            alert("Booth Design Generated Successfully!");
+            setBoothSuccess(t("boothGeneratedSuccess"));
+setTimeout(() => {
+  setBoothSuccess("");
+}, 3000);
 
         } catch (error) {
             console.error("Booth Generation Error:", error);
@@ -677,6 +713,7 @@ export default function TechnicalProposal() {
                             </>
                         )}
 
+
                         {/* STEP 3 */}
                         {activeStep === 3 && (
                             <>
@@ -754,6 +791,77 @@ export default function TechnicalProposal() {
                                     defaultValue={boothApiText}
                                     onChange={(e) => setBoothUserText(e.target.value)}
                                 />
+                                {/* Booth Size */}
+                                <div className="grid grid-cols-2 gap-6 mt-6">
+                                    {/* Booth Size */}
+                                    <div>
+                                        <label className="block mb-2 font-medium">
+                                            {t("boothSize")}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="w-full p-4 rounded-2xl border shadow-sm"
+                                            placeholder="6m x 3m"
+                                            value={boothSize}
+                                            onChange={(e) => setBoothSize(e.target.value)}
+                                        />
+                                    </div>
+
+                                    {/* Primary Colors */}
+                                    <div>
+                                        <label className="block mb-2 font-medium">
+                                            {t("primaryColors")}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="w-full p-4 rounded-2xl border shadow-sm"
+                                            placeholder="blue and white"
+                                            value={primaryColors}
+                                            onChange={(e) => setPrimaryColors(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+
+                                {/* Event Type */}
+                                <div className="grid grid-cols-2 gap-6 mt-6">
+                                    {/* Event Type */}
+                                    <div>
+                                        <label className="block mb-2 font-medium">
+                                            {t("eventType")}
+                                        </label>
+                                        <select
+                                            className="w-full p-4 rounded-2xl border shadow-sm bg-white"
+                                            value={eventType}
+                                            onChange={(e) => setEventType(e.target.value)}
+                                        >
+                                            {EVENT_TYPES.map((type) => (
+                                                <option key={type} value={type}>
+                                                    {t(type)}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Design Style */}
+                                    <div>
+                                        <label className="block mb-2 font-medium">
+                                            {t("designStyle")}
+                                        </label>
+                                        <select
+                                            className="w-full p-4 rounded-2xl border shadow-sm bg-white"
+                                            value={designStyle}
+                                            onChange={(e) => setDesignStyle(e.target.value)}
+                                        >
+                                            {DESIGN_STYLES.map((style) => (
+                                                <option key={style} value={style}>
+                                                    {t(style)}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
 
                                 <div className="flex justify-center my-6">
                                     <button
@@ -767,6 +875,13 @@ export default function TechnicalProposal() {
                                                 ? t("regenerateBooth")
                                                 : t("generateBooth")}
                                     </button>
+                                    {boothSuccess && (
+  <div className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-green-700">
+    <span className="text-lg">✅</span>
+    <span className="font-medium">{boothSuccess}</span>
+  </div>
+)}
+
 
                                 </div>
                                 {boothImageUrl && (
